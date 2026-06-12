@@ -35,16 +35,16 @@ from src.models import SampleConfig
 from src.calculations import calculate_concentration, calculate_fluence
 
 config = SampleConfig(
-    sample_name="[Co(bpy)3][Cl]3",
-    extinction_coeff=123.0,
-    molecular_weight=633.698,
-    solvent_ratio="ACN:DMSO 306:1",
+    sample_name="[Ru(bpy)3][Cl]3",
+    extinction_coeff=10800,
+    molecular_weight=640.53,
+    solvent_ratio="Water",
 )
 
-conc = calculate_concentration(config, jet_diameter_um=5.0, reservoir_volume_mL=35.0, target_absorbance=0.025)
-flux = calculate_fluence(config, target_absorbance=0.025, wavelength_nm=393.0,
-                         spot_size_v_um=240.0, spot_size_h_um=100.0,
-                         rep_rate_Hz=33000.0, target_fexc=0.24)
+conc = calculate_concentration(config, jet_diameter_um=100.0, reservoir_volume_mL=35.0, target_absorbance=0.3)
+flux = calculate_fluence(config, target_absorbance=0.3, wavelength_nm=400.0,
+                         spot_size_v_um=100.0, spot_size_h_um=100.0,
+                         rep_rate_Hz=120, target_fexc=0.25)
 ```
 
 ## Structure

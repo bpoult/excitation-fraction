@@ -12,6 +12,6 @@
     "spot_size_v_um": 100.0,
     "spot_size_h_um": 100.0,
     "rep_rate_Hz": 120.0,
-    "target_fexc": 0.24,
+    "target_fexc": 0.25,
     "pulse_duration_s": 5e-14
 }
