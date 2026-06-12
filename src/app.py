@@ -201,17 +201,19 @@ def _tab2_layout():
                 ]),
             ], width=4),
             # Right: 2×2 plot grid
+            # (1,1) pulse energy vs fexc  |  (1,2) fluence vs pulse energy
+            # (2,1) OD vs concentration   |  (2,2) fexc vs depth
             dbc.Col([
                 dbc.Row([
-                    dbc.Col(dcc.Graph(id="plot-fexc-vs-depth",
-                                     style={"height": "380px"}), width=6),
                     dbc.Col(dcc.Graph(id="plot-pulse-energy-vs-fexc",
+                                     style={"height": "380px"}), width=6),
+                    dbc.Col(dcc.Graph(id="plot-fluence-vs-pulse-energy",
                                      style={"height": "380px"}), width=6),
                 ], className="mb-2"),
                 dbc.Row([
-                    dbc.Col(dcc.Graph(id="plot-fluence-vs-pulse-energy",
-                                     style={"height": "380px"}), width=6),
                     dbc.Col(dcc.Graph(id="plot-od-vs-concentration-tab2",
+                                     style={"height": "380px"}), width=6),
+                    dbc.Col(dcc.Graph(id="plot-fexc-vs-depth",
                                      style={"height": "380px"}), width=6),
                 ]),
             ], width=8),

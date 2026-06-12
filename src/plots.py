@@ -36,9 +36,18 @@ MARKER_COLOR = "#EF553B"     # Red/orange — current operating point
 MARKER_SIZE = 12
 N_SWEEP = 300                # Number of points in sweep curves
 
+# Legend style: bottom-right, just above the x-axis (used by most plots)
+_LEGEND_BOTTOM_RIGHT = dict(
+    orientation="h", x=1.0, y=0.0, xanchor="right", yanchor="bottom",
+)
+# Legend style: top-right inside plot area (used by fexc vs depth)
+_LEGEND_TOP_RIGHT = dict(
+    orientation="h", x=0.99, y=0.99, xanchor="right", yanchor="top",
+)
+
 
 def _base_figure(title: str, xaxis_title: str, yaxis_title: str) -> go.Figure:
-    """Return a figure with shared layout settings applied."""
+    """Return a figure with shared layout settings applied (no legend set here)."""
     fig = go.Figure()
     fig.update_layout(
         template=PLOT_TEMPLATE,
@@ -46,7 +55,6 @@ def _base_figure(title: str, xaxis_title: str, yaxis_title: str) -> go.Figure:
         xaxis_title=xaxis_title,
         yaxis_title=yaxis_title,
         margin=dict(l=60, r=30, t=60, b=60),
-        legend=dict(orientation="h", yanchor="top", y=0.99, xanchor="right", x=0.99),
     )
     return fig
 
@@ -113,6 +121,7 @@ def plot_od_vs_concentration(
         name=f"Operating point ({result.concentration_mM:.1f} mM, OD {target_absorbance:.4f})",
     ))
 
+    fig.update_layout(legend=_LEGEND_BOTTOM_RIGHT)
     return fig
 
 
@@ -195,6 +204,7 @@ def plot_fexc_vs_depth(
         hovertemplate="%{text}<extra></extra>",
     ))
 
+    fig.update_layout(legend=_LEGEND_TOP_RIGHT)
     return fig
 
 
@@ -318,6 +328,7 @@ def plot_pulse_energy_vs_fexc(
 
     fig.update_yaxes(range=[0, fexc_max])
 
+    fig.update_layout(legend=_LEGEND_BOTTOM_RIGHT)
     return fig
 
 
@@ -383,4 +394,5 @@ def plot_fluence_vs_pulse_energy(
         ),
     ))
 
+    fig.update_layout(legend=_LEGEND_BOTTOM_RIGHT)
     return fig
