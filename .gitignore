@@ -39,3 +39,7 @@ Thumbs.db
 # Saved configs — track only the factory default
 configs/*.json
 !configs/default.json
+
+# Markdown files , only keep readme for github.
+*.md
+!README.md
