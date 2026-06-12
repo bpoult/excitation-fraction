@@ -541,7 +541,7 @@ def update_tab2(
 
         # Mirrored concentration result for Tab2's OD plot
         from .calculations import calculate_concentration as _cc
-        _jet_d = float(shared.get("jet_diameter_um", jet_diameter_um or 5.0))
+        _jet_d = float(shared.get("jet_diameter_um", 5.0))
         _res_v = float(shared.get("reservoir_volume_mL", 35.0))
         conc_result = _cc(
             config,

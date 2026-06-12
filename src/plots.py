@@ -46,7 +46,7 @@ def _base_figure(title: str, xaxis_title: str, yaxis_title: str) -> go.Figure:
         xaxis_title=xaxis_title,
         yaxis_title=yaxis_title,
         margin=dict(l=60, r=30, t=60, b=60),
-        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
+        legend=dict(orientation="h", yanchor="top", y=0.99, xanchor="right", x=0.99),
     )
     return fig
 
