@@ -2,7 +2,7 @@
     "name": "Default \u2014 [Ru(bpy)3][Cl]3",
     "created": "2026-06-12T00:00:00",
     "sample_name": "[Ru(bpy)3][Cl]3",
-    "extinction_coeff": 1080,
+    "extinction_coeff": 10800,
     "molecular_weight": 640.53,
     "solvent_ratio": "Water",
     "jet_diameter_um": 100.0,
