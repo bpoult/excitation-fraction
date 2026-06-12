@@ -62,9 +62,3 @@ excitation-fraction/
     └── tests/
         └── test_calculations.py
 ```
-
-## Documentation
-
-- `SAMPLE_LASER_CALCULATIONS_README.md` — full description of the underlying spreadsheet formulas and physics
-- `SESSION_REPORT.md` — implementation details, design decisions, and verified numerical results
-- `DASH_IMPLEMENTATION_PLAN.md` — full specification for the GUI layer
