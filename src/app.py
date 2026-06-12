@@ -48,18 +48,18 @@ app = dash.Dash(
 # ---------------------------------------------------------------------------
 
 DEFAULTS = {
-    "sample_name": "[Co(bpy)3][Cl]3",
-    "extinction_coeff": 123.0,
-    "molecular_weight": 633.698,
-    "solvent_ratio": "ACN:DMSO 306:1",
-    "jet_diameter_um": 5.0,
+    "sample_name": "[Ru(bpy)3][Cl]3",
+    "extinction_coeff": 10800,
+    "molecular_weight": 640.53,
+    "solvent_ratio": "Water",
+    "jet_diameter_um": 100.0,
     "reservoir_volume_mL": 35.0,
-    "target_absorbance": 0.025,
-    "wavelength_nm": 393.0,
-    "spot_size_v_um": 240.0,
+    "target_absorbance": 0.3,
+    "wavelength_nm": 400.0,
+    "spot_size_v_um": 100.0,
     "spot_size_h_um": 100.0,
-    "rep_rate_Hz": 33000.0,
-    "target_fexc": 0.24,
+    "rep_rate_Hz": 120.0,
+    "target_fexc": 0.25,
     "pulse_duration_fs": 50.0,   # displayed in fs; converted to s in callbacks
     "fexc_max": 2.0,
 }
