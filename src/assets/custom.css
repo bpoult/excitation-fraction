@@ -30,15 +30,26 @@ label,
     border-color: #375a7f;
 }
 
-/* Dropdown (react-select) menu text must be readable on its dark field. */
-.Select-control,
-.Select-menu-outer,
-.Select-option,
-.Select-value-label,
-.Select-placeholder {
-    color: #f0f0f0 !important;
-    background-color: #2b2b2b !important;
+/* Config dropdown (Dash 4 dcc.Dropdown): black text on a light field, incl. the open menu. */
+.dash-dropdown,
+.dash-dropdown-content,
+.dash-dropdown-option,
+.dash-dropdown-value,
+.dash-dropdown-search {
+    color: #000 !important;
+    background-color: #f8f9fa !important;
 }
-.Select-option.is-focused {
-    background-color: #375a7f !important;
+.dash-dropdown-placeholder {
+    color: #555 !important;
+}
+.dash-dropdown-trigger-icon,
+.dash-dropdown-value-count,
+.dash-dropdown-search-icon,
+.dash-dropdown-clear {
+    color: #000 !important;
+    fill: #000 !important;
+}
+.dash-dropdown-option:hover,
+.dash-dropdown-option:focus-within {
+    background-color: #dbe4f0 !important;
 }

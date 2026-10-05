@@ -14,7 +14,7 @@ Given a target absorbance and excitation fraction, computes the required sample 
 Notes:
 - Requires the Microsoft Edge WebView2 runtime, which is built into Windows 11 and recent Windows 10. If the app reports it is missing, install the [Evergreen bootstrapper](https://developer.microsoft.com/en-us/microsoft-edge/webview2/#download-section).
 - Saved configurations are written to `ExcitationFraction\configs\*.json`. Copy or share these files freely; `default.json` is recreated if deleted.
-- If the app fails to start, see `ExcitationFraction\excitation_fraction.log`.
+- If the app fails to start, see `ExcitationFraction\excitation_fraction.log`. Keep `ExcitationFraction.exe.config` next to the exe — without it, Windows blocks a downloaded copy from loading its .NET components (the log then shows "Failed to resolve Python.Runtime.Loader.Initialize").
 - The app is fully offline — no internet connection is required.
 
 ## Running from source

@@ -260,7 +260,7 @@ _top_bar = dbc.Card([
                             options=list_configs(CONFIGS_DIR),
                             placeholder="Select a saved config…",
                             clearable=False,
-                            style={"backgroundColor": "#2b2b2b", "color": "#f0f0f0"},
+                            style={"backgroundColor": "#f8f9fa", "color": "#000"},
                         ),
                         width=9,
                     ),
