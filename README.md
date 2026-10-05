@@ -104,3 +104,12 @@ excitation-fraction/
     └── tests/
         └── test_calculations.py
 ```
+
+## License
+
+MIT — see [`LICENSE`](LICENSE). Use, modify and share freely; just keep the copyright notice.
+
+The Windows build redistributes third-party libraries under their own permissive licenses: Dash, Plotly and
+pythonnet (MIT); dash-bootstrap-components (Apache-2.0); NumPy, Flask, Werkzeug and pywebview (BSD-3-Clause); Python
+(PSF). Their license texts ship inside `ExcitationFraction\_internal\` alongside each package. The bundled Bootswatch
+"Darkly" theme in `src/assets/` is MIT.
