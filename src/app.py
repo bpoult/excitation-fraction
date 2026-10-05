@@ -3,9 +3,12 @@ app.py
 ------
 Dash web application for the Sample & Laser Calculations GUI.
 
-Run with:
-    cd /sdf/home/b/bpoult/Excitation_Fraction
+Run with (development, browser at http://127.0.0.1:8050):
+    cd excitation-fraction
     python -m src.app
+
+The packaged desktop app uses launcher.py instead, which serves `app.server`
+and shows it in a native window.
 
 Layout
 ------
@@ -18,9 +21,6 @@ via a dcc.Store component, eliminating the manual-copy problem from the spreadsh
 """
 
 import pathlib
-
-import os
-os.environ['DASH_JUPYTER_MODE'] = 'external'
 
 import dash
 import dash_bootstrap_components as dbc
@@ -40,11 +40,16 @@ from .config_io import list_configs, load_config, save_config, config_exists, CO
 # App initialisation
 # ---------------------------------------------------------------------------
 
+# The Bootswatch Darkly theme is served from src/assets/ (see assets/README.txt)
+# rather than dbc.themes.DARKLY so the app needs no internet connection.
+_ASSETS_DIR = pathlib.Path(__file__).resolve().parent / "assets"
+
 app = dash.Dash(
     __name__,
-    external_stylesheets=[dbc.themes.DARKLY],
+    assets_folder=str(_ASSETS_DIR),
     title="Sample & Laser Calculations",
 )
+server = app.server
 
 # ---------------------------------------------------------------------------
 # Default input values (match spreadsheet defaults)
@@ -255,7 +260,7 @@ _top_bar = dbc.Card([
                             options=list_configs(CONFIGS_DIR),
                             placeholder="Select a saved config…",
                             clearable=False,
-                            style={"backgroundColor": "#2b2b2b", "color": "#111"},
+                            style={"backgroundColor": "#2b2b2b", "color": "#f0f0f0"},
                         ),
                         width=9,
                     ),
@@ -718,4 +723,5 @@ def overwrite_cancel(n_clicks):
 # ---------------------------------------------------------------------------
 
 if __name__ == "__main__":
+    # Development only (hot reload, browser). The desktop build uses launcher.py.
     app.run(debug=True)

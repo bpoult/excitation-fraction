@@ -20,6 +20,9 @@ dist/
 build/
 .eggs/
 
+# Runtime log written by launcher.py / the packaged exe
+*.log
+
 # Virtual environments
 .venv/
 venv/

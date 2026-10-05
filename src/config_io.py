@@ -12,11 +12,24 @@ Public API
 list_configs(configs_dir)  -> list[dict]   — options for dcc.Dropdown
 load_config(filepath)      -> dict          — all input field values
 save_config(configs_dir, name, data) -> pathlib.Path
+ensure_default_config(configs_dir)          — seed default.json on first run
+
+Config directory
+----------------
+CONFIGS_DIR is the user-writable folder that list/save operate on:
+  - running from source (python -m src.app):  <repo>/configs
+  - frozen PyInstaller build:                  <folder containing the .exe>/configs
+    (portable — the exe folder can be zipped and shared with its configs)
+BUNDLED_DEFAULT_CONFIG is the read-only factory default.json shipped inside the
+bundle (sys._MEIPASS) or the repo; ensure_default_config() copies it into
+CONFIGS_DIR if no default.json exists there yet.
 """
 
 import json
 import pathlib
 import re
+import shutil
+import sys
 from datetime import datetime
 
 # ---------------------------------------------------------------------------
@@ -39,9 +52,40 @@ REQUIRED_FIELDS = (
     "pulse_duration_s",
 )
 
-# Default configs directory — resolved relative to this file's location
-# (src/ → parent → Excitation_Fraction/ → configs/)
-CONFIGS_DIR = pathlib.Path(__file__).parent.parent / "configs"
+def _resolve_configs_dir() -> pathlib.Path:
+    """User-writable configs folder (see module docstring)."""
+    if getattr(sys, "frozen", False):
+        return pathlib.Path(sys.executable).resolve().parent / "configs"
+    # src/ → parent → excitation-fraction/ → configs/
+    return pathlib.Path(__file__).resolve().parent.parent / "configs"
+
+
+def _resolve_bundled_default() -> pathlib.Path:
+    """Read-only factory default.json shipped with the app."""
+    base = pathlib.Path(
+        getattr(sys, "_MEIPASS", pathlib.Path(__file__).resolve().parent.parent)
+    )
+    return base / "configs" / "default.json"
+
+
+CONFIGS_DIR = _resolve_configs_dir()
+BUNDLED_DEFAULT_CONFIG = _resolve_bundled_default()
+
+
+def ensure_default_config(configs_dir: pathlib.Path = CONFIGS_DIR) -> None:
+    """
+    Create `configs_dir` and copy the bundled default.json into it if absent.
+
+    Safe to call on every start-up. When running from source the bundled file
+    and the target are the same path, so this is a no-op.
+    """
+    configs_dir.mkdir(parents=True, exist_ok=True)
+    target = configs_dir / "default.json"
+    if target.exists() or not BUNDLED_DEFAULT_CONFIG.exists():
+        return
+    if BUNDLED_DEFAULT_CONFIG.resolve() == target.resolve():
+        return
+    shutil.copyfile(BUNDLED_DEFAULT_CONFIG, target)
 
 
 def list_configs(configs_dir: pathlib.Path = CONFIGS_DIR) -> list[dict]:
