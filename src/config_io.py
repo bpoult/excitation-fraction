@@ -20,6 +20,8 @@ CONFIGS_DIR is the user-writable folder that list/save operate on:
   - running from source (python -m src.app):  <repo>/configs
   - frozen PyInstaller build:                  <folder containing the .exe>/configs
     (portable — the exe folder can be zipped and shared with its configs)
+  - frozen macOS .app:  ~/Library/Application Support/ExcitationFraction/configs
+    (a signed .app bundle must not be written into)
 BUNDLED_DEFAULT_CONFIG is the read-only factory default.json shipped inside the
 bundle (sys._MEIPASS) or the repo; ensure_default_config() copies it into
 CONFIGS_DIR if no default.json exists there yet.
@@ -55,6 +57,9 @@ REQUIRED_FIELDS = (
 def _resolve_configs_dir() -> pathlib.Path:
     """User-writable configs folder (see module docstring)."""
     if getattr(sys, "frozen", False):
+        if sys.platform == "darwin":
+            return (pathlib.Path.home() / "Library" / "Application Support"
+                    / "ExcitationFraction" / "configs")
         return pathlib.Path(sys.executable).resolve().parent / "configs"
     # src/ → parent → excitation-fraction/ → configs/
     return pathlib.Path(__file__).resolve().parent.parent / "configs"

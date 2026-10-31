@@ -17,6 +17,22 @@ Notes:
 - If the app fails to start, see `ExcitationFraction\excitation_fraction.log`. Keep `ExcitationFraction.exe.config` next to the exe — without it, Windows blocks a downloaded copy from loading its .NET components (the log then shows "Failed to resolve Python.Runtime.Loader.Initialize").
 - The app is fully offline — no internet connection is required.
 
+## macOS app (no Python needed)
+
+Requires macOS 26 or later on Apple silicon.
+
+1. Download `ExcitationFraction-macos-arm64.zip` from the [latest release](https://github.com/bpoult/excitation-fraction/releases/latest).
+2. Double-click the zip to extract `ExcitationFraction.app`, and drag it to `Applications` (optional).
+3. The app is not notarized, so the first launch is blocked ("Apple could not verify…"). Click **Done**, then open
+   **System Settings → Privacy & Security**, scroll down and click **Open Anyway** next to ExcitationFraction.
+   Later launches open normally.
+
+Notes:
+- Saved configurations are written to `~/Library/Application Support/ExcitationFraction/configs/*.json`.
+  `default.json` is recreated if deleted.
+- If the app fails to start, see `~/Library/Logs/ExcitationFraction/excitation_fraction.log`.
+- The window uses the built-in macOS WebKit; like the Windows app, it is fully offline.
+
 ## Running from source
 
 Python 3.12+
@@ -64,6 +80,21 @@ gh release create v1.0.0 dist/ExcitationFraction-win64.zip --title "v1.0.0" --no
 
 Do not commit the zip or `dist\` to the repository.
 
+## Building the macOS app
+
+On a Mac (macOS 26+, Apple silicon), with the project environment active (`pip install -r requirements-build.txt` once):
+
+```bash
+./build_macos.sh
+```
+
+This uses the same `ExcitationFraction.spec` and produces `dist/ExcitationFraction-macos-arm64.zip` (containing
+`ExcitationFraction.app`, ad-hoc signed). Attach it to the same GitHub Release as the Windows zip:
+
+```bash
+gh release upload v1.0.0 dist/ExcitationFraction-macos-arm64.zip
+```
+
 ### Use the functions directly
 
 ```python
@@ -92,6 +123,7 @@ excitation-fraction/
 ├── launcher.py                 # Desktop entry point (local server + native window)
 ├── ExcitationFraction.spec     # PyInstaller build spec
 ├── build.bat                   # Build + zip the Windows app
+├── build_macos.sh              # Build + zip the macOS app
 ├── requirements.txt            # Runtime dependencies
 ├── requirements-build.txt      # + PyInstaller, pywebview, pytest
 └── src/
@@ -109,7 +141,7 @@ excitation-fraction/
 
 MIT — see [`LICENSE`](LICENSE). Use, modify and share freely; just keep the copyright notice.
 
-The Windows build redistributes third-party libraries under their own permissive licenses: Dash, Plotly and
-pythonnet (MIT); dash-bootstrap-components (Apache-2.0); NumPy, Flask, Werkzeug and pywebview (BSD-3-Clause); Python
-(PSF). Their license texts ship inside `ExcitationFraction\_internal\` alongside each package. The bundled Bootswatch
+The Windows and macOS builds redistribute third-party libraries under their own permissive licenses: Dash, Plotly and
+pythonnet (MIT; Windows only); pyobjc (MIT; macOS only); dash-bootstrap-components (Apache-2.0); NumPy, Flask, Werkzeug and pywebview (BSD-3-Clause); Python
+(PSF). Their license texts ship inside `ExcitationFraction\_internal\` (Windows) or `ExcitationFraction.app/Contents/` (macOS) alongside each package. The bundled Bootswatch
 "Darkly" theme in `src/assets/` is MIT.
