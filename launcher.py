@@ -8,10 +8,13 @@ thread and shows it in a native window (pywebview / WebView2). Closing the
 window shuts the server down and exits.
 
 Run from source:   python launcher.py          (repo root)
-Packaged build:    dist/ExcitationFraction/ExcitationFraction.exe
+Packaged build:    dist/ExcitationFraction/ExcitationFraction.exe   (Windows)
+                   dist/ExcitationFraction.app                      (macOS)
 
 All diagnostics go to excitation_fraction.log next to the exe (or next to this
-file when run from source), because the packaged build has no console.
+file when run from source), because the packaged build has no console. The
+macOS .app writes it to ~/Library/Logs/ExcitationFraction/ instead, since an
+app bundle must not be modified.
 """
 
 import ctypes
@@ -31,9 +34,15 @@ STARTUP_TIMEOUT_S = 20
 LOG_NAME = "excitation_fraction.log"
 
 FROZEN = bool(getattr(sys, "frozen", False))
+MACOS = sys.platform == "darwin"
 
 
 def base_dir() -> pathlib.Path:
+    """Folder that receives the log file."""
+    if FROZEN and MACOS:
+        path = pathlib.Path.home() / "Library" / "Logs" / "ExcitationFraction"
+        path.mkdir(parents=True, exist_ok=True)
+        return path
     if FROZEN:
         return pathlib.Path(sys.executable).resolve().parent
     return pathlib.Path(__file__).resolve().parent
@@ -55,7 +64,18 @@ def setup_logging(log_path: pathlib.Path) -> None:
 
 def show_error(message: str) -> None:
     try:
-        ctypes.windll.user32.MessageBoxW(None, message, f"{APP_TITLE} - error", 0x10)
+        if MACOS:
+            import subprocess
+
+            # AppleScript string literal: escape backslashes and quotes.
+            text = message.replace("\\", "\\\\").replace('"', '\\"')
+            subprocess.run(
+                ["osascript", "-e",
+                 f'display alert "{APP_TITLE} - error" message "{text}" as critical'],
+                check=False,
+            )
+        else:
+            ctypes.windll.user32.MessageBoxW(None, message, f"{APP_TITLE} - error", 0x10)
     except Exception:
         pass
 

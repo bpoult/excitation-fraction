@@ -3,14 +3,18 @@
 #
 #   pyinstaller ExcitationFraction.spec --noconfirm --clean
 #
-# Output: dist/ExcitationFraction/ExcitationFraction.exe (+ _internal/).
-# See build.bat for the full build + zip step.
+# Output (Windows): dist/ExcitationFraction/ExcitationFraction.exe (+ _internal/).
+# Output (macOS):   dist/ExcitationFraction.app
+# See build.bat / build_macos.sh for the full build + zip step.
 
 import os
+import sys
 
 from PyInstaller.utils.hooks import collect_all
 
 ROOT = os.path.abspath(SPECPATH)
+MACOS = sys.platform == "darwin"
+APP_VERSION = "1.0.0"
 
 datas, binaries, hiddenimports = [], [], []
 
@@ -28,12 +32,19 @@ datas += [
     (os.path.join(ROOT, "src", "assets"), os.path.join("src", "assets")),
 ]
 
+if MACOS:
+    # pywebview's Cocoa backend uses the system WKWebView via pyobjc.
+    hiddenimports += ["webview.platforms.cocoa", "objc", "AppKit", "Foundation", "WebKit"]
+else:
+    hiddenimports += [
+        "webview.platforms.winforms",
+        "webview.platforms.edgechromium",
+        "clr",
+        "clr_loader",
+        "clr_loader.netfx",
+    ]
+
 hiddenimports += [
-    "webview.platforms.winforms",
-    "webview.platforms.edgechromium",
-    "clr",
-    "clr_loader",
-    "clr_loader.netfx",
     "src",
     "src.app",
     "src.calculations",
@@ -82,6 +93,9 @@ _DROP_PREFIXES = tuple(
     )
 )
 _DROP_SUFFIXES = (".dev.js", ".js.map")
+if MACOS:
+    # WebView2 / WinForms DLLs and the Android jar are useless on macOS.
+    _DROP_PREFIXES += (os.path.join("webview", "lib"),)
 
 
 def _keep(dest_name: str) -> bool:
@@ -91,6 +105,7 @@ def _keep(dest_name: str) -> bool:
 
 
 a.datas = [entry for entry in a.datas if _keep(entry[0])]
+a.binaries = [entry for entry in a.binaries if _keep(entry[0])]
 
 pyz = PYZ(a.pure)
 
@@ -122,3 +137,20 @@ coll = COLLECT(
     upx_exclude=[],
     name="ExcitationFraction",
 )
+
+if MACOS:
+    app = BUNDLE(
+        coll,
+        name="ExcitationFraction.app",
+        icon=None,
+        bundle_identifier="io.github.bpoult.excitationfraction",
+        version=APP_VERSION,
+        info_plist={
+            "CFBundleDisplayName": "Excitation Fraction",
+            "CFBundleShortVersionString": APP_VERSION,
+            "LSMinimumSystemVersion": "26.0",
+            "NSHighResolutionCapable": True,
+            # Only talks to its own 127.0.0.1 server.
+            "NSAppTransportSecurity": {"NSAllowsLocalNetworking": True},
+        },
+    )

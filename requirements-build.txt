@@ -1,7 +1,8 @@
-# Extra packages needed to build the Windows desktop app (build.bat) and run tests.
+# Extra packages needed to build the desktop app (build.bat / build_macos.sh) and run tests.
+# On macOS pywebview pulls in pyobjc (Cocoa/WebKit) automatically.
 -r requirements.txt
 pyinstaller>=6.10
 pyinstaller-hooks-contrib>=2024.8
 pywebview>=5.3
-pythonnet>=3.0.3
+pythonnet>=3.0.3; sys_platform == "win32"
 pytest>=8
